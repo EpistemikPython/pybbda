@@ -17,9 +17,9 @@ def url_to_table_rows(url, table_id):
     payload = requests.get(url).text
     soup = BeautifulSoup(payload, features="lxml")
     tbl = soup.find(id=table_id)
-    rows = tbl.find_all("tr")
-    table_rows = [
-        [column.get_text() for column in row.find_all(["td", "th"])] for row in rows
-    ]
-    logger.debug("found table with %d rows", len(table_rows))
+    table_rows = []
+    if tbl:
+        rows = tbl.find_all("tr")
+        table_rows.append( [column.get_text() for column in row.find_all(["td", "th"])] for row in rows )
+        logger.debug("found table with %d rows", len(table_rows))
     return table_rows
